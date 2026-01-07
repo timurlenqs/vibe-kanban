@@ -1,0 +1,22 @@
+services:
+  vibe-kanban:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        POSTHOG_API_KEY: ""
+        POSTHOG_API_ENDPOINT: ""
+    container_name: vibe-kanban
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - HOST=0.0.0.0
+      - PORT=3006
+    volumes:
+      - /var/lib/vibe-kanban/repos:/repos
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.vibe-kanban.rule=Host(`kanban.kbyotomasyon.com`)"
+      - "traefik.http.routers.vibe-kanban.tls=true"
+      - "traefik.http.routers.vibe-kanban.tls.certresolver=letsencrypt"
